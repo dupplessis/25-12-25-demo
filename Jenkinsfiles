@@ -3,17 +3,17 @@ pipeline {
 
     environment {
         DOCKERHUB_USER = "csanoop50"
-        IMAGE_NAME = "nodejs-app"
+        IMAGE_NAME = "jenkins-app"
         IMAGE_TAG = "latest"
         DOCKER_CREDENTIALS = "dockerhub-creds"
-        CONTAINER_NAME = "nodejs-app-container"
+        CONTAINER_NAME = "jenkins-app-container"
     }
 
     stages {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
+                git branch: 'main', url: 'https://github.com/dupplessis/25-12-25-demo.git'
             }
         }
 
