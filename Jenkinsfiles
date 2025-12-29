@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_USER = "csanoop50"
         IMAGE_NAME = "jenkins-app"
         IMAGE_TAG = "latest"
-        DOCKER_CREDENTIALS = "dockerhub-creds"
+        DOCKER_CREDENTIALS = "dockerhub-credential"
         CONTAINER_NAME = "jenkins-app-container"
     }
 
