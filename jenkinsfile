@@ -11,7 +11,7 @@ pipeline {
 
         stage('Clone Repo') {
             steps {
-                git credentialsId: 'github-cred',
+                git credentialsId: 'github-creds',
                     url: 'https://github.com/dupplessis/25-12-25-demo.git'
             }
         }
