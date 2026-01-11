@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "nodejs-app"
+        DOCKERHUB_USER = "csanoop50"
+        IMAGE_NAME = "csanoop50/nodejs-app:latest"
+    }
+
+    stages {
+
+        stage('Clone Repo') {
+            steps {
+                git credentialsId: 'github-creds',
+                    url: 'https://github.com/duplessis/nodejs-jenkins-docker.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Docker Hub Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Image to Docker Hub') {
+            steps {
+                sh 'docker push $IMAGE_NAME'
+            }
+        }
+
+        stage('Deploy Application (Local EC2)') {
+            steps {
+                sh '''
+                docker pull $IMAGE_NAME
+                docker stop $APP_NAME || true
+                docker rm $APP_NAME || true
+                docker run -d -p 3000:3000 --name $APP_NAME $IMAGE_NAME
+                '''
+            }
+        }
+    }
+}
